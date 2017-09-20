@@ -8,6 +8,6 @@ require_relative "api/api"
 module Keybase
   module API
     # The current version of `keybase-unofficial-api`.
-    VERSION = "0.0.2"
+    VERSION = "0.0.3"
   end
 end

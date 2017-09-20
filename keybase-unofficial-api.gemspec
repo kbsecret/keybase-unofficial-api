@@ -17,5 +17,5 @@ Gem::Specification.new do |s|
   s.license               = "MIT"
 
   s.add_runtime_dependency "faraday", "~> 0"
-  s.add_runtime_dependency "keybase-unofficial-core", "~> 0"
+  s.add_runtime_dependency "keybase-unofficial-core", "~> 1.0"
 end
