@@ -1,6 +1,8 @@
 keybase-unofficial-api
 ======================
 
+[![Gem Version](https://badge.fury.io/rb/keybase-unofficial-api.svg)](https://badge.fury.io/rb/keybase-unofficial-api)
+
 An unofficial Ruby library for the Keybase REST API.
 
 ### Installation
