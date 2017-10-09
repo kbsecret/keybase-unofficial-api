@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.email                 = "william@tuffbizz.com"
   s.files                 = Dir["LICENSE", "*.md", ".yardopts", "lib/**/*"]
   s.required_ruby_version = ">= 2.3.0"
-  s.homepage              = "https://github.com/woodruffw/keybase-unofficial-api"
+  s.homepage              = "https://github.com/kbsecret/keybase-unofficial-api"
   s.license               = "MIT"
 
   s.add_runtime_dependency "faraday", "~> 0"
