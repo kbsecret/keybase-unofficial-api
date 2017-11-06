@@ -2,6 +2,7 @@
 
 require "keybase/core"
 
+require_relative "api/exceptions"
 require_relative "api/api"
 
 # The primary namespace.

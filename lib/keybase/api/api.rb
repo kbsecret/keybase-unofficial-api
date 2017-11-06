@@ -12,6 +12,26 @@ module Keybase
     BASE_URL = "https://keybase.io/_/api/1.0"
 
     class << self
+      # Cleans up the object returned by {api_call}.
+      # @param struct [OpenStruct] a structified response from the Keybase API
+      # @param [OpenStruct] an unwrapped version of the response
+      # @raise [Exceptions::APIError] when the struct contains an error message
+      def unwrap(struct)
+        raise Exceptions::APIError, struct.status.desc unless struct.status.code.zero?
+
+        struct
+      end
+
+      # Make a GET request to the given endpoint with the given parameters.
+      # @param endpoint [String] the keybase API endpoint
+      # @param query [Hash] the request parameters
+      # @return [OpenStruct] a struct mapping of the JSON response
+      # @api private
+      def api_call(endpoint, query)
+        response = Faraday.get "#{BASE_URL}#{endpoint}", query
+        unwrap JSON.parse response.body, object_class: OpenStruct
+      end
+
       # Look up a user, users, or external identity.
       # @param query [Hash] the request parameters
       # @option query username [String] the username to look up
@@ -26,7 +46,7 @@ module Keybase
       def lookup(**query)
         query[:usernames] = Core::U[query[:usernames]]
 
-        fetch_and_structify "/user/lookup.json", query
+        api_call "/user/lookup.json", query
       end
 
       # Test whether the given user exists on Keybase.
@@ -37,7 +57,7 @@ module Keybase
       #  Keybase::API.user? "idonotexist" # => false
       # @note This call only works on Keybase usernames, not external identities.
       def user?(user)
-        lookup(username: user).status.code.zero?
+        lookup(username: user).status.code.zero? rescue false
       end
 
       # Search Keybase for identity components.
@@ -47,7 +67,7 @@ module Keybase
       #  Keybase::API.autocomplete "William Woodruff"
       # @see https://keybase.io/docs/api/1.0/call/user/autocomplete
       def autocomplete(query)
-        fetch_and_structify "/user/autocomplete.json", q: query
+        api_call "/user/autocomplete.json", q: query
       end
 
       # Discover Keybase users from external identities.
@@ -62,7 +82,7 @@ module Keybase
       #  `hackernews`, `reddit`, `github`, etc.)
       # @see https://keybase.io/docs/api/1.0/call/user/discover
       def discover(**query)
-        fetch_and_structify "/user/discover.json", query
+        api_call "/user/discover.json", query
       end
 
       # Retrieve the current site-wide Merkle root hash.
@@ -73,7 +93,7 @@ module Keybase
       # @return [OpenStruct] a struct mapping of the JSON response
       # @see https://keybase.io/docs/api/1.0/call/merkle/root
       def merkle_root(**query)
-        fetch_and_structify "/merkle/root.json", query
+        api_call "/merkle/root.json", query
       end
 
       # Retrieve a Merkle node corresponding to a given hash.
@@ -82,17 +102,7 @@ module Keybase
       # @return [OpenStruct] a struct mapping of the JSON response
       # @see https://keybase.io/docs/api/1.0/call/merkle/block
       def merkle_block(**query)
-        fetch_and_structify "/merkle/block.json", query
-      end
-
-      # Make a GET request to the given endpoint with the given parameters.
-      # @param endpoint [String] the keybase API endpoint
-      # @param query [Hash] the request parameters
-      # @return [OpenStruct] a struct mapping of the JSON response
-      # @api private
-      def fetch_and_structify(endpoint, query)
-        response = Faraday.get "#{BASE_URL}#{endpoint}", query
-        JSON.parse(response.body, object_class: OpenStruct)
+        api_call "/merkle/block.json", query
       end
     end
   end
