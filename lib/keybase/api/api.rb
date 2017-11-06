@@ -14,7 +14,6 @@ module Keybase
     class << self
       # Cleans up the object returned by {api_call}.
       # @param struct [OpenStruct] a structified response from the Keybase API
-      # @param [OpenStruct] an unwrapped version of the response
       # @raise [Exceptions::APIError] when the struct contains an error message
       def unwrap(struct)
         raise Exceptions::APIError, struct.status.desc unless struct.status.code.zero?
@@ -26,6 +25,7 @@ module Keybase
       # @param endpoint [String] the keybase API endpoint
       # @param query [Hash] the request parameters
       # @return [OpenStruct] a struct mapping of the JSON response
+      # @raise [Exceptions::APIError] if the API call fails
       # @api private
       def api_call(endpoint, query)
         response = Faraday.get "#{BASE_URL}#{endpoint}", query
@@ -37,6 +37,7 @@ module Keybase
       # @option query username [String] the username to look up
       # @option query usernames [Array<String>] multiple usernames to look up
       # @return [OpenStruct] a struct mapping of the JSON response
+      # @raise [Exceptions::APIError] if the API call fails
       # @example
       #  Keybase::API.lookup username: "yossarian"
       #  Keybase::API.lookup github: "woodruffw"
@@ -63,6 +64,7 @@ module Keybase
       # Search Keybase for identity components.
       # @param query [String] the string to search for
       # @return [OpenStruct] a struct mapping of the JSON response
+      # @raise [Exceptions::APIError] if the API call fails
       # @example
       #  Keybase::API.autocomplete "William Woodruff"
       # @see https://keybase.io/docs/api/1.0/call/user/autocomplete
@@ -76,6 +78,7 @@ module Keybase
       # @option query usernames_only [Boolean] whether or not to reply with
       #  only names
       # @return [OpenStruct] a struct mapping of the JSON response
+      # @raise [Exceptions::APIError] if the API call fails
       # @example
       #  Keybase::API.discover github: "woodruffw", flatten: true
       # @note Any identity supported by keybase should work (e.g, `domain`,
@@ -91,6 +94,7 @@ module Keybase
       # @option query ctime [Integer] return the first root on or after the
       #  given time (UTC)
       # @return [OpenStruct] a struct mapping of the JSON response
+      # @raise [Exceptions::APIError] if the API call fails
       # @see https://keybase.io/docs/api/1.0/call/merkle/root
       def merkle_root(**query)
         api_call "/merkle/root.json", query
@@ -100,6 +104,7 @@ module Keybase
       # @param query [Hash] the request parameters
       # @option query hash [String] the hash of the block to look up
       # @return [OpenStruct] a struct mapping of the JSON response
+      # @raise [Exceptions::APIError] if the API call fails
       # @see https://keybase.io/docs/api/1.0/call/merkle/block
       def merkle_block(**query)
         api_call "/merkle/block.json", query
