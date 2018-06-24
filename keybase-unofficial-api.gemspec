@@ -6,9 +6,9 @@ Gem::Specification.new do |s|
   s.name                  = "keybase-unofficial-api"
   s.version               = Keybase::API::VERSION
   s.summary               = "keybase-unofficial-api - Unofficial library for the Keybase API"
-  s.description           = <<~EOS
+  s.description           = <<~DESCRIPTION
                               This library provides access to Keybase's REST API from Ruby.
-                            EOS
+                            DESCRIPTION
   s.authors               = ["William Woodruff"]
   s.email                 = "william@tuffbizz.com"
   s.files                 = Dir["LICENSE", "*.md", ".yardopts", "lib/**/*"]
