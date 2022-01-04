@@ -16,6 +16,6 @@ Gem::Specification.new do |s|
   s.homepage              = "https://github.com/kbsecret/keybase-unofficial-api"
   s.license               = "MIT"
 
-  s.add_runtime_dependency "faraday", "< 2"
+  s.add_runtime_dependency "faraday", "< 3"
   s.add_runtime_dependency "keybase-unofficial-core", "~> 1.0"
 end
